@@ -2,6 +2,7 @@ package com.numble.banking.domain.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -17,6 +18,7 @@ class UserRepositoryTest {
     private UserRepository repository;
 
     @Test
+    @DisplayName("사용자 DB 저장")
     void testSaveUser() {
         // given
         User user = User.builder().userName("TestUser").password("1234").loginId("LOGIN_ID")
@@ -29,5 +31,4 @@ class UserRepositoryTest {
         User savedUser = repository.findByLoginId("LOGIN_ID");
         assertThat(savedUser).isEqualTo(user);
     }
-
 }
