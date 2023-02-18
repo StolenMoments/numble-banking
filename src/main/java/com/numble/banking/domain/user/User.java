@@ -2,6 +2,7 @@ package com.numble.banking.domain.user;
 
 
 import com.numble.banking.domain.account.Account;
+import com.numble.banking.dto.UserCreateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -56,6 +57,12 @@ public class User implements Serializable {
         this.loginId = loginId;
         this.password = new BCryptPasswordEncoder().encode(password);
         this.userName = userName;
+    }
+
+    public User(UserCreateRequestDto requestDto) {
+        this.loginId = requestDto.getLoginId();
+        this.password = new BCryptPasswordEncoder().encode(requestDto.getPassword());
+        this.userName = requestDto.getUserName();
     }
 
     @Override
