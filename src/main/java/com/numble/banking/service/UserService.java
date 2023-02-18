@@ -1,9 +1,9 @@
 package com.numble.banking.service;
 
-import com.numble.banking.domain.user.User;
 import com.numble.banking.domain.user.UserRepository;
 import com.numble.banking.dto.UserCreateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +13,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public Long createUser(UserCreateRequestDto requestDto) {
         if (userRepository.findByLoginId(requestDto.getLoginId()) != null) {
@@ -20,7 +22,9 @@ public class UserService {
             return -1L;
         }
 
-        User user = new User(requestDto);
-        return userRepository.save(user).getUserId();
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+        requestDto.setPassword(encodedPassword);
+
+        return userRepository.save(requestDto.toEntity()).getUserId();
     }
 }

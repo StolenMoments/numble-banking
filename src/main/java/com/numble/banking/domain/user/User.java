@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Getter
 @Setter
@@ -34,6 +33,7 @@ public class User implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 391110102552547473L;
+
     @Id
     @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,15 +53,16 @@ public class User implements Serializable {
     private String userName;
 
     @Builder
-    public User(String loginId, String password, String userName) {
+    public User(Long userId, String loginId, String password, String userName) {
+        this.userId = userId;
         this.loginId = loginId;
-        this.password = new BCryptPasswordEncoder().encode(password);
+        this.password = password;
         this.userName = userName;
     }
 
     public User(UserCreateRequestDto requestDto) {
         this.loginId = requestDto.getLoginId();
-        this.password = new BCryptPasswordEncoder().encode(requestDto.getPassword());
+        this.password = requestDto.getPassword();
         this.userName = requestDto.getUserName();
     }
 
