@@ -15,6 +15,11 @@ public class UserService {
 
     @Transactional
     public Long createUser(UserCreateRequestDto requestDto) {
+        if (userRepository.findByLoginId(requestDto.getLoginId()) != null) {
+            // 임시 처리
+            return -1L;
+        }
+
         User user = new User(requestDto);
         return userRepository.save(user).getUserId();
     }
