@@ -28,7 +28,9 @@ class UserRepositoryTest {
         repository.save(user);
 
         // then
-        User savedUser = repository.findByLoginId("LOGIN_ID");
+        User savedUser = repository.findByLoginId("LOGIN_ID")
+            .orElseThrow(IllegalArgumentException::new);
+
         assertThat(savedUser).isEqualTo(user);
     }
 }

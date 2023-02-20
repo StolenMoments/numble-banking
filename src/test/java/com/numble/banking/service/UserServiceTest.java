@@ -77,7 +77,8 @@ class UserServiceTest {
 
             User existingUser = requestDto.toEntity();
 
-            when(userRepository.findByLoginId(loginId)).thenReturn(existingUser);
+            when(userRepository.findByLoginId(loginId)
+                .orElseThrow(IllegalArgumentException::new)).thenReturn(existingUser);
 
             // when
             Long createdUserId = userService.createUser(requestDto);
