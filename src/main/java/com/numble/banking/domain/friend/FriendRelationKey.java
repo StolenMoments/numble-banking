@@ -12,10 +12,12 @@ import java.io.Serializable;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Embeddable
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FriendRelationKey implements Serializable {
