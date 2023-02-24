@@ -4,7 +4,9 @@ import com.numble.banking.domain.friend.Friend;
 import com.numble.banking.domain.friend.FriendRepository;
 import com.numble.banking.domain.user.User;
 import com.numble.banking.domain.user.UserRepository;
+import com.numble.banking.dto.FriendAddRequestDto;
 import com.numble.banking.dto.FriendResponseDto;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +20,34 @@ public class FriendService {
     private final UserRepository userRepository;
 
     public List<FriendResponseDto> getFriends(String loginId) {
-        User user = userRepository.findByLoginId(loginId).orElseThrow(IllegalArgumentException::new);
+        User user = userRepository.findByLoginId(loginId)
+            .orElseThrow(IllegalArgumentException::new);
 
         List<Friend> friends = friendRepository.findFriendsByUserId(user.getUserId());
 
         List<FriendResponseDto> dtos = new ArrayList<>();
 
         for (Friend friend : friends) {
-            User friendUser = userRepository.findById(friend.getFriendRelationKey().getFriendId()).orElse(null);
-            if (friendUser == null) continue;
+            User friendUser = userRepository.findById(friend.getFriendRelationKey().getFriendId())
+                .orElse(null);
+            if (friendUser == null) {
+                continue;
+            }
 
             dtos.add(new FriendResponseDto(friendUser));
         }
 
         return dtos;
+    }
+
+    @Transactional
+    public Long addFriend(FriendAddRequestDto requestDto) {
+        User fromUser = userRepository.findByLoginId(requestDto.getFromLoginId()).orElseThrow(IllegalArgumentException::new);
+        User toUser = userRepository.findByLoginId(requestDto.getToLoginId()).orElseThrow(IllegalArgumentException::new);
+
+        friendRepository.save(new Friend(fromUser, toUser.getUserId()));
+        friendRepository.save(new Friend(toUser, fromUser.getUserId()));
+
+        return fromUser.getUserId();
     }
 }
