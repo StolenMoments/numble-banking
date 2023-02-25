@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import com.numble.banking.domain.user.User;
 import com.numble.banking.domain.user.UserRepository;
 import com.numble.banking.dto.UserCreateRequestDto;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -77,8 +78,7 @@ class UserServiceTest {
 
             User existingUser = requestDto.toEntity();
 
-            when(userRepository.findByLoginId(loginId)
-                .orElseThrow(IllegalArgumentException::new)).thenReturn(existingUser);
+            when(userRepository.findByLoginId(loginId)).thenReturn(Optional.of(existingUser));
 
             // when
             Long createdUserId = userService.createUser(requestDto);
