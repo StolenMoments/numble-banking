@@ -19,6 +19,9 @@ public class FriendResponseDto {
         this.userId = user.getUserId();
         this.loginId = user.getLoginId();
         this.userName = user.getUserName();
-        this.accountId = user.getAccount().getAccountId();
+
+        if (user.getAccount() != null) {
+            this.accountId = user.getAccount().getAccountId();
+        }
     }
 }
