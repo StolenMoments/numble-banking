@@ -6,6 +6,9 @@ import static org.mockito.Mockito.when;
 
 import com.numble.banking.domain.account.Account;
 import com.numble.banking.domain.account.AccountRepository;
+import com.numble.banking.domain.friend.Friend;
+import com.numble.banking.domain.friend.FriendRelationKey;
+import com.numble.banking.domain.friend.FriendRepository;
 import com.numble.banking.domain.user.User;
 import com.numble.banking.domain.user.UserRepository;
 import com.numble.banking.dto.AccountCreateRequestDto;
@@ -28,6 +31,9 @@ class AccountServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private FriendRepository friendRepository;
 
     @InjectMocks
     private AccountService accountService;
@@ -70,7 +76,6 @@ class AccountServiceTest {
         Long accountId = 1L;
         Long initBalance = 0L;
         Long amount = 100L;
-
 
         Account account = Account.builder()
             .accountId(accountId)
@@ -165,6 +170,10 @@ class AccountServiceTest {
             .amount(amount)
             .build();
 
+        FriendRelationKey key = new FriendRelationKey(sender, receiver.getUserId());
+
+        when(friendRepository.findById(key)).thenReturn(
+            Optional.of(new Friend(sender, receiver.getUserId())));
         when(userRepository.findByLoginId("sender")).thenReturn(Optional.of(sender));
         when(userRepository.findByLoginId("receiver")).thenReturn(Optional.of(receiver));
         when(accountRepository.findByUser(sender)).thenReturn(Optional.of(senderAccount));
