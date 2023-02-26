@@ -1,6 +1,7 @@
 package com.numble.banking.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -186,5 +187,31 @@ class AccountServiceTest {
 
         // then
         assertThat(balance).isEqualTo(senderBalance - amount);
+    }
+
+    @Test
+    void testTransferMoneyWhenNotFriendRelation() {
+        // given
+        long amount = 3000L;
+
+        User sender = User.builder()
+            .loginId("sender")
+            .build();
+        User receiver = User.builder()
+            .loginId("receiver")
+            .build();
+
+        AccountTransferRequestDto requestDto = AccountTransferRequestDto.builder()
+            .loginId("sender")
+            .receiverLoginId("receiver")
+            .amount(amount)
+            .build();
+
+        when(userRepository.findByLoginId("sender")).thenReturn(Optional.of(sender));
+        when(userRepository.findByLoginId("receiver")).thenReturn(Optional.of(receiver));
+
+        // when & then
+        assertThatThrownBy(() -> accountService.transferMoney(requestDto))
+            .hasMessageContaining("친구가 아닙니다.");
     }
 }
