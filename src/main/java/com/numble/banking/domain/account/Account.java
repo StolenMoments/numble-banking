@@ -50,7 +50,8 @@ public class Account implements Serializable {
     }
 
     @Builder
-    public Account(User user, Long balance) {
+    public Account(Long accountId, User user, Long balance) {
+        this.accountId = accountId;
         this.user = user;
         this.balance = balance;
     }
