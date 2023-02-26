@@ -46,9 +46,15 @@ public class AccountService {
             .orElseThrow(IllegalArgumentException::new);
 
         withdrawMoney(
-            AccountWithdrawRequestDto.builder().accountId(senderAccount.getAccountId()).build());
+            AccountWithdrawRequestDto.builder()
+                .amount(requestDto.getAmount())
+                .accountId(senderAccount.getAccountId())
+                .build());
         depositMoney(
-            AccountDepositRequestDto.builder().accountId(receiverAccount.getAccountId()).build());
+            AccountDepositRequestDto.builder()
+                .amount(requestDto.getAmount())
+                .accountId(receiverAccount.getAccountId())
+                .build());
 
         return senderAccount.getBalance();
     }
