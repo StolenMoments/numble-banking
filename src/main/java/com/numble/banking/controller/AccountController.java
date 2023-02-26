@@ -1,6 +1,7 @@
 package com.numble.banking.controller;
 
 import com.numble.banking.dto.AccountCreateRequestDto;
+import com.numble.banking.dto.AccountDepositRequestDto;
 import com.numble.banking.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,11 @@ public class AccountController {
     @PostMapping
     public Long createAccount(@RequestBody AccountCreateRequestDto requestDto) {
         return service.createAccount(requestDto);
+    }
+
+    @PostMapping("/deposit")
+    public Long depositMoney(@RequestBody AccountDepositRequestDto requestDto) {
+        return service.depositMoney(requestDto);
     }
 
 }
