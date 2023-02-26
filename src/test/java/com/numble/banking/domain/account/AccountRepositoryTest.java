@@ -103,7 +103,7 @@ class AccountRepositoryTest {
     void testUpdateWithdraw() {
         // given
         long amount = 10000L;
-        long initBalance = 5000L;
+        long initBalance = 50000L;
 
         Account account = Account.builder()
             .user(user01)
