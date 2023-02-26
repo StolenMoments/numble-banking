@@ -3,6 +3,7 @@ package com.numble.banking.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import com.numble.banking.domain.account.Account;
@@ -38,6 +39,10 @@ class AccountServiceTest {
 
     @InjectMocks
     private AccountService accountService;
+
+    @Mock
+    private AccountAlarmService alarmService;
+
 
     @Test
     void testCreateAccount() {
@@ -181,6 +186,8 @@ class AccountServiceTest {
         when(accountRepository.findByUser(receiver)).thenReturn(Optional.of(receiverAccount));
         when(accountRepository.findByAccountId(1L)).thenReturn(Optional.of(senderAccount));
         when(accountRepository.findByAccountId(2L)).thenReturn(Optional.of(receiverAccount));
+        when(accountRepository.findByAccountId(2L)).thenReturn(Optional.of(receiverAccount));
+        doNothing().when(alarmService).callAlarmService("", "");
 
         // when
         Long balance = accountService.transferMoney(requestDto);
