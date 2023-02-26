@@ -10,6 +10,7 @@ import com.numble.banking.domain.user.User;
 import com.numble.banking.domain.user.UserRepository;
 import com.numble.banking.dto.AccountCreateRequestDto;
 import com.numble.banking.dto.AccountDepositRequestDto;
+import com.numble.banking.dto.AccountTransferRequestDto;
 import com.numble.banking.dto.AccountWithdrawRequestDto;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -133,5 +134,48 @@ class AccountServiceTest {
 
         // then
         assertThat(result).isEqualTo(balance);
+    }
+
+    @Test
+    void testTransferMoney() {
+        // given
+        long senderBalance = 10000L;
+        long receiverBalance = 5000L;
+        long amount = 3000L;
+
+        User sender = User.builder()
+            .loginId("sender")
+            .build();
+        User receiver = User.builder()
+            .loginId("receiver")
+            .build();
+        Account senderAccount = Account.builder()
+            .user(sender)
+            .balance(senderBalance)
+            .accountId(1L)
+            .build();
+        Account receiverAccount = Account.builder()
+            .user(receiver)
+            .balance(receiverBalance)
+            .accountId(2L)
+            .build();
+        AccountTransferRequestDto requestDto = AccountTransferRequestDto.builder()
+            .loginId("sender")
+            .receiverLoginId("receiver")
+            .amount(amount)
+            .build();
+
+        when(userRepository.findByLoginId("sender")).thenReturn(Optional.of(sender));
+        when(userRepository.findByLoginId("receiver")).thenReturn(Optional.of(receiver));
+        when(accountRepository.findByUser(sender)).thenReturn(Optional.of(senderAccount));
+        when(accountRepository.findByUser(receiver)).thenReturn(Optional.of(receiverAccount));
+        when(accountRepository.findByAccountId(1L)).thenReturn(Optional.of(senderAccount));
+        when(accountRepository.findByAccountId(2L)).thenReturn(Optional.of(receiverAccount));
+
+        // when
+        Long balance = accountService.transferMoney(requestDto);
+
+        // then
+        assertThat(balance).isEqualTo(senderBalance - amount);
     }
 }
