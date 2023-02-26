@@ -1,6 +1,5 @@
 package com.numble.banking.dto;
 
-import java.math.BigInteger;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +9,10 @@ import lombok.NoArgsConstructor;
 public class AccountCreateRequestDto {
 
     private String loginId;
-    private BigInteger amount;
+    private Long amount;
 
     @Builder
-    public AccountCreateRequestDto(String loginId, BigInteger amount) {
+    public AccountCreateRequestDto(String loginId, Long amount) {
         this.loginId = loginId;
         this.amount = amount;
     }

@@ -11,7 +11,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,18 +39,18 @@ public class Account implements Serializable {
     private User user;
 
     @Column(name = "BALANCE")
-    private BigInteger balance;
+    private Long balance;
 
-    public void depositMoney(BigInteger amount) {
-        this.balance = this.balance.add(amount);
+    public void depositMoney(Long amount) {
+        this.balance = this.balance + amount;
     }
 
-    public void withdrawMoney(BigInteger amount) {
-        this.balance = this.balance.subtract(amount);
+    public void withdrawMoney(Long amount) {
+        this.balance = this.balance - amount;
     }
 
     @Builder
-    public Account(User user, BigInteger balance) {
+    public Account(User user, Long balance) {
         this.user = user;
         this.balance = balance;
     }
