@@ -66,7 +66,7 @@ public class AccountService {
 
         account.depositMoney(requestDto.getAmount());
 
-        return account.getAccountId();
+        return account.getBalance();
     }
 
     @Transactional
