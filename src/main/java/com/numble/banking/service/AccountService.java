@@ -2,6 +2,8 @@ package com.numble.banking.service;
 
 import com.numble.banking.domain.account.Account;
 import com.numble.banking.domain.account.AccountRepository;
+import com.numble.banking.domain.friend.FriendRelationKey;
+import com.numble.banking.domain.friend.FriendRepository;
 import com.numble.banking.domain.user.User;
 import com.numble.banking.domain.user.UserRepository;
 import com.numble.banking.dto.AccountCreateRequestDto;
@@ -18,6 +20,8 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+
+    private final FriendRepository friendRepository;
 
     @Transactional
     public Long createAccount(AccountCreateRequestDto requestDto) {
@@ -39,6 +43,12 @@ public class AccountService {
 
         User receiver = userRepository.findByLoginId(requestDto.getReceiverLoginId())
             .orElseThrow(IllegalArgumentException::new);
+
+        FriendRelationKey key = new FriendRelationKey(sender, receiver.getUserId());
+
+        if (friendRepository.findById(key).isEmpty()) {
+            throw new IllegalArgumentException("친구가 아닙니다.");
+        }
 
         Account senderAccount = accountRepository.findByUser(sender)
             .orElseThrow(IllegalArgumentException::new);
