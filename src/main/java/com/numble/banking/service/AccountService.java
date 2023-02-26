@@ -93,6 +93,7 @@ public class AccountService {
         return account.getBalance();
     }
 
+    @Transactional
     public Long getBalance(Long accountId) {
         return accountRepository.findByAccountId(accountId)
             .orElseThrow(IllegalArgumentException::new).getBalance();
