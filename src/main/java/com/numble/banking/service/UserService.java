@@ -17,7 +17,7 @@ public class UserService {
 
     @Transactional
     public Long createUser(UserCreateRequestDto requestDto) {
-        if (userRepository.findByLoginId(requestDto.getLoginId()) != null) {
+        if (userRepository.findByLoginId(requestDto.getLoginId()).isPresent()) {
             // 임시 처리
             return -1L;
         }
