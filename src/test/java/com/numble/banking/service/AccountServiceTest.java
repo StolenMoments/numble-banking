@@ -143,7 +143,7 @@ class AccountServiceTest {
     }
 
     @Test
-    void testTransferMoney() {
+    void testTransferMoney() throws InterruptedException {
         // given
         long senderBalance = 10000L;
         long receiverBalance = 5000L;
