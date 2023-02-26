@@ -23,6 +23,8 @@ public class AccountService {
 
     private final FriendRepository friendRepository;
 
+    private final AccountAlarmService alarmService;
+
     @Transactional
     public Long createAccount(AccountCreateRequestDto requestDto) {
         User user = userRepository.findByLoginId(requestDto.getLoginId())
@@ -37,7 +39,7 @@ public class AccountService {
     }
 
     @Transactional
-    public Long transferMoney(AccountTransferRequestDto requestDto) {
+    public Long transferMoney(AccountTransferRequestDto requestDto) throws InterruptedException {
         User sender = userRepository.findByLoginId(requestDto.getLoginId())
             .orElseThrow(IllegalArgumentException::new);
 
@@ -65,6 +67,8 @@ public class AccountService {
                 .amount(requestDto.getAmount())
                 .accountId(receiverAccount.getAccountId())
                 .build());
+
+        alarmService.callAlarmService(receiver.getLoginId(), "계좌 이체 완료");
 
         return senderAccount.getBalance();
     }

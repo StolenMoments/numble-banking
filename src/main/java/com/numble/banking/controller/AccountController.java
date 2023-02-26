@@ -6,6 +6,7 @@ import com.numble.banking.dto.AccountTransferRequestDto;
 import com.numble.banking.dto.AccountWithdrawRequestDto;
 import com.numble.banking.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ public class AccountController {
         return service.withdrawMoney(requestDto);
     }
 
+    @SneakyThrows
     @PostMapping("/transfer")
     public Long transferMoney(@RequestBody AccountTransferRequestDto requestDto) {
         return service.transferMoney(requestDto);
