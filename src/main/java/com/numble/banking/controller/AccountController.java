@@ -2,6 +2,7 @@ package com.numble.banking.controller;
 
 import com.numble.banking.dto.AccountCreateRequestDto;
 import com.numble.banking.dto.AccountDepositRequestDto;
+import com.numble.banking.dto.AccountTransferRequestDto;
 import com.numble.banking.dto.AccountWithdrawRequestDto;
 import com.numble.banking.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,11 @@ public class AccountController {
     public Long withdrawMoney(@RequestBody AccountWithdrawRequestDto requestDto) {
         return service.withdrawMoney(requestDto);
     }
+
+    @PostMapping("/transfer")
+    public Long transferMoney(@RequestBody AccountTransferRequestDto requestDto) {
+        return service.transferMoney(requestDto);
+    }
+
 
 }

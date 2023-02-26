@@ -6,6 +6,7 @@ import com.numble.banking.domain.user.User;
 import com.numble.banking.domain.user.UserRepository;
 import com.numble.banking.dto.AccountCreateRequestDto;
 import com.numble.banking.dto.AccountDepositRequestDto;
+import com.numble.banking.dto.AccountTransferRequestDto;
 import com.numble.banking.dto.AccountWithdrawRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,27 @@ public class AccountService {
             .build();
 
         return accountRepository.save(account).getAccountId();
+    }
+
+    @Transactional
+    public Long transferMoney(AccountTransferRequestDto requestDto) {
+        User sender = userRepository.findByLoginId(requestDto.getLoginId())
+            .orElseThrow(IllegalArgumentException::new);
+
+        User receiver = userRepository.findByLoginId(requestDto.getReceiverLoginId())
+            .orElseThrow(IllegalArgumentException::new);
+
+        Account senderAccount = accountRepository.findByUser(sender)
+            .orElseThrow(IllegalArgumentException::new);
+        Account receiverAccount = accountRepository.findByUser(receiver)
+            .orElseThrow(IllegalArgumentException::new);
+
+        withdrawMoney(
+            AccountWithdrawRequestDto.builder().accountId(senderAccount.getAccountId()).build());
+        depositMoney(
+            AccountDepositRequestDto.builder().accountId(receiverAccount.getAccountId()).build());
+
+        return senderAccount.getBalance();
     }
 
     @Transactional
