@@ -43,7 +43,7 @@ public class AccountController {
     }
 
     @GetMapping
-    public Long getBalance(@RequestParam Long accountId) {
+    public Long getBalance(@RequestParam("id") Long accountId) {
         return service.getBalance(accountId);
     }
 
