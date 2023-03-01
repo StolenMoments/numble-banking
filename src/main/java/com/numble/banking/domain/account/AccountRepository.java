@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findByUser(User user);
-    Optional<Account> findByUser_LoginId(String loginId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Account> findByAccountId(Long accountId);
