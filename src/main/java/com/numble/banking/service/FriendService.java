@@ -6,11 +6,11 @@ import com.numble.banking.domain.user.User;
 import com.numble.banking.domain.user.UserRepository;
 import com.numble.banking.dto.FriendAddRequestDto;
 import com.numble.banking.dto.FriendResponseDto;
-import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +19,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public List<FriendResponseDto> getFriends(String loginId) {
         User user = userRepository.findByLoginId(loginId)
             .orElseThrow(IllegalArgumentException::new);
