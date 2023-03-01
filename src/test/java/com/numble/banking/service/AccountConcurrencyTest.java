@@ -47,7 +47,7 @@ class AccountConcurrencyTest {
         receiverUserId = userService.createUser(userCreateRequestDto2);
 
         AccountCreateRequestDto accountCreateRequestDto1 = AccountCreateRequestDto.builder()
-            .loginId("sender").amount(10000L).build();
+            .loginId("sender").amount(100000L).build();
         senderAccountId = accountService.createAccount(accountCreateRequestDto1);
 
         AccountCreateRequestDto accountCreateRequestDto2 = AccountCreateRequestDto.builder()
@@ -97,10 +97,11 @@ class AccountConcurrencyTest {
 
         long amount = 500L;
         int numberOfThreads = 10;
+        int executeCnt = numberOfThreads * 5;
 
         ExecutorService exeService = Executors.newFixedThreadPool(numberOfThreads);
-        CountDownLatch latch = new CountDownLatch(numberOfThreads);
-        for (int i = 0; i < numberOfThreads; i++) {
+        CountDownLatch latch = new CountDownLatch(executeCnt);
+        for (int i = 0; i < executeCnt; i++) {
             exeService.execute(() -> {
                 try {
                     accountService.transferMoney(
@@ -111,8 +112,8 @@ class AccountConcurrencyTest {
                             .loginId("sender")
                             .amount(amount)
                             .build());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 } finally {
                     latch.countDown();
                 }
@@ -122,7 +123,8 @@ class AccountConcurrencyTest {
 
         Long senderBalance = accountService.getBalance(senderAccountId);
         Long receiverBalance = accountService.getBalance(receiverAccountId);
-        assertThat(receiverBalance).isEqualTo(amount * numberOfThreads);
-        assertThat(senderBalance).isEqualTo(10000L - (amount * numberOfThreads));
+        assertThat(senderBalance + receiverBalance).isEqualTo(100000L);
+        assertThat(receiverBalance).isEqualTo(amount * executeCnt);
+        assertThat(senderBalance).isEqualTo(100000L - (amount * executeCnt));
     }
 }
