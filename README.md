@@ -1,8 +1,8 @@
 # $ 넘블 뱅킹 서버 구축하기 챌린지
 
-GitHub : https://github.com/StolenMoments/numble-banking
-Server : https://49.50.163.50:8080/api
-Swagger : http://49.50.163.53:8080/api/swagger-ui/index.html
+- GitHub : https://github.com/StolenMoments/numble-banking
+- Server : https://49.50.163.50:8080/api
+- Swagger : http://49.50.163.53:8080/api/swagger-ui/index.html
 
 ## 🤔 구현 목표
 
